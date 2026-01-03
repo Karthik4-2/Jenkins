@@ -1,0 +1,48 @@
+pipeline {
+    agent any
+
+    environment {
+        APP_NAME = "Jenkins-Pipeline-Practice"
+    }
+
+    stages {
+
+        stage('Checkout Code') {
+            steps {
+                echo "Checking out source code..."
+                git branch: 'main',
+                    url: 'https://github.com/singipilliyernisai/jenkins.git'
+            }
+        }
+
+        stage('Show Workspace') {
+            steps {
+                echo "Listing workspace files"
+                sh 'ls -l'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo "Building application: $APP_NAME"
+                sh 'echo Build completed successfully'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo "Running tests"
+                sh 'echo All tests passed'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "✅ Pipeline completed successfully"
+        }
+        failure {
+            echo "❌ Pipeline failed"
+        }
+    }
+}
