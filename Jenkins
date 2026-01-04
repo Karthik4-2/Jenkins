@@ -2,47 +2,40 @@ pipeline {
     agent any
 
     environment {
-        APP_NAME = "Jenkins-Pipeline-Practice"
+        image_name = "Jenkins-docker-demo"
     }
 
     stages {
 
-        stage('Checkout Code') {
+        stage('Checkout') {
             steps {
-                echo "Checking out source code..."
+                echo "Code checked out"
                 git branch: 'main',
                     url: 'https://github.com/Karthik4-2/Jenkins.git'
             }
         }
 
-        stage('Show Workspace') {
+        stage('docker image building') {
             steps {
-                echo "Listing workspace files"
-                sh 'ls -l'
+                echo "Building docker image"
+                sh 'docker build -t $image_name .'
             }
         }
 
-        stage('Build') {
+        stage('running the container') {
             steps {
-                echo "Building application: $APP_NAME"
-                sh 'echo Build completed successfully'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                echo "Running tests"
-                sh 'echo All tests passed'
+                echo "Running the docker container"
+                sh 'docker run -d -p 8081:80 --name demo_container $image_name'
             }
         }
     }
 
     post {
         success {
-            echo "✅ Pipeline completed successfully"
+            echo "docker container completed"
         }
         failure {
-            echo "❌ Pipeline failed"
+            echo "not completed docker container"
         }
     }
 }
