@@ -18,14 +18,14 @@ pipeline {
         stage('docker image building') {
             steps {
                 echo "Building docker image"
-                sh 'docker build -t $image_name .'
+                sh 'docker build -t jenkins-docker-demo'
             }
         }
 
         stage('running the container') {
             steps {
                 echo "Running the docker container"
-                sh 'docker run -d -p 8081:80 --name demo_container $image_name'
+                sh 'docker run -d -p 8081:80 --name jenkins-demo jenkins-docker-demo'
             }
         }
     }
